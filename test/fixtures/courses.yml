@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  topic: MyString
+  description: MyString
+  currency: 1
+  started_at: 2022-04-23 20:49:11
+  ended_at: 2022-04-23 20:49:11
+  genre: one
+  url: MyString
+  expiration_day: 1
+
+two:
+  topic: MyString
+  description: MyString
+  currency: 1
+  started_at: 2022-04-23 20:49:11
+  ended_at: 2022-04-23 20:49:11
+  genre: two
+  url: MyString
+  expiration_day: 1

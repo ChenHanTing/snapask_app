@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  expiration_date: 2022-04-23 20:50:03
+  member: one
+  courses: one
+  pay_method: 1
+  paid_at: 2022-04-23 20:50:03
+
+two:
+  expiration_date: 2022-04-23 20:50:03
+  member: two
+  courses: two
+  pay_method: 1
+  paid_at: 2022-04-23 20:50:03
