@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   get 'pages/index'
   devise_for :members
   devise_for :users
+  resources :users, only: %w[index edit update]
 
   # 首頁
   root to: 'pages#index'

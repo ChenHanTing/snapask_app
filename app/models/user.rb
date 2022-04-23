@@ -4,5 +4,11 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  enum role: [:super_admin, :admin]
+  enum role: [:super_admin, :admin, :ordinary]
+
+  def can_edit?
+    admin? || super_admin?
+  end
+
+  has_many :courses
 end

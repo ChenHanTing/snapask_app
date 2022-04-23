@@ -18,12 +18,14 @@ ActiveRecord::Schema.define(version: 2022_04_23_125003) do
     t.integer "currency"
     t.datetime "started_at"
     t.datetime "ended_at"
+    t.integer "user_id"
     t.integer "genre_id"
     t.string "url"
     t.integer "expiration_day"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["genre_id"], name: "index_courses_on_genre_id"
+    t.index ["user_id"], name: "index_courses_on_user_id"
   end
 
   create_table "genres", force: :cascade do |t|

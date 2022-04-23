@@ -1,0 +1,29 @@
+<h3>編輯</h3>
+
+<%= form_for @user, url: { action: 'update' }, html: { class: "nifty_form" } do |f| %>
+	<div class="card">
+		<div class="card-body">
+			<div class="form-group mb-3">
+			</div>
+			
+			<div class="form-group mb-3">
+				<%= f.label :email, "email:", class: "col-md-4 control-label" %>
+				<div class="col-md-8">
+					<%= f.text_field :email, class: "form-control" %>
+				</div>
+			</div>
+			
+			<div class="form-group mb-3">
+				<%= f.label :role, "角色權限:", class: "col-md-4 control-label" %>
+				<div class="col-md-8">
+					<%= f.select :role, options_for_select(User.roles.map(&:itself), @user.role), {}, class: "form-control" %>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<%= f.submit "送出", class: "btn btn-primary" %>
+				<%= link_to "回首頁", root_path, class: "btn btn-warning" %>
+			</div>
+		</div>
+	</div>
+<% end %>

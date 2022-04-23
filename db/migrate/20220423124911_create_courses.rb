@@ -6,6 +6,7 @@ class CreateCourses < ActiveRecord::Migration[5.2]
       t.integer :currency
       t.datetime :started_at
       t.datetime :ended_at
+      t.belongs_to :user, foreign_key: true
       t.belongs_to :genre, foreign_key: true
       t.string :url
       t.integer :expiration_day

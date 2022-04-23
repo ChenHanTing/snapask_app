@@ -21,15 +21,17 @@
       <div class="collapse navbar-collapse" id="mynavbar">
         <ul class="navbar-nav me-auto">
           <% if user_signed_in? %>
-            <li class="nav-item">
-              <%= link_to "類別", genres_path, class: "nav-link" %>
-            </li>
+            <% if current_user.super_admin? %>
+              <li class="nav-item">
+                <%= link_to "使用者", users_path, class: "nav-link" %>
+              </li>
+              <li class="nav-item">
+                <%= link_to "類別", genres_path, class: "nav-link" %>
+              </li>
+            <% end %>
           <% end %>
           <li class="nav-item">
-            <%= link_to "Blogs", "#!", class: "nav-link" %>
-          </li>
-          <li class="nav-item">
-            <%= link_to "Articles", "#!", class: "nav-link" %>
+            <%= link_to "課程", courses_path, class: "nav-link" %>
           </li>
         </ul>
         <ul class="navbar-nav">

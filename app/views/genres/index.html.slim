@@ -9,11 +9,11 @@
         tr
           td= genre.title
           td
-            - if current_user.admin?
+            - if current_user.can_edit?
               = link_to "編輯", edit_genre_path(genre), class: "btn btn-secondary btn-sm", disabled: true
               = link_to "刪除", genre_path(genre), class: "btn btn-danger btn-sm", method: :delete, data: { confirm: "確定要刪除這筆資料嗎?" }
 - else
   p 目前尚有任何內容
 
-- if current_user.admin?
+- if current_user.can_edit?
   = link_to "新增", new_genre_path, class: "btn btn-primary"

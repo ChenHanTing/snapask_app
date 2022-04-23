@@ -1,0 +1,23 @@
+<div data-controller="articles">
+	<!--	<table class="table data-table" id="articles-table">-->
+	<table class="table data-table">
+		<thead>
+		<tr>
+			<td>Email</td>
+			<td>角色權限</td>
+			<td></td>
+		</tr>
+		</thead>
+		<tbody>
+		<% User.all.each do |user| %>
+			<tr>
+				<td><%= user.email %></td>
+				<td><%= user.role %></td>
+				<td>
+					<%= link_to "編輯", edit_user_path(user), class: "btn btn-secondary btn-sm" %>
+				</td>
+			</tr>
+		<% end %>
+		</tbody>
+	</table>
+</div>
