@@ -1,4 +1,4 @@
 class MemberCourse < ApplicationRecord
   belongs_to :member
-  belongs_to :courses
+  belongs_to :course
 end

@@ -35,12 +35,12 @@ ActiveRecord::Schema.define(version: 2022_04_23_125003) do
   create_table "member_courses", force: :cascade do |t|
     t.datetime "expiration_date"
     t.integer "member_id"
-    t.integer "courses_id"
+    t.integer "course_id"
     t.integer "pay_method"
     t.datetime "paid_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["courses_id"], name: "index_member_courses_on_courses_id"
+    t.index ["course_id"], name: "index_member_courses_on_course_id"
     t.index ["member_id"], name: "index_member_courses_on_member_id"
   end
 

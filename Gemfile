@@ -75,3 +75,5 @@ gem "grape", "~> 1.6"
 gem "grape-entity", "~> 0.10.1"
 
 gem "slim-rails", "~> 3.4"
+
+gem "annotate", "~> 3.2"
