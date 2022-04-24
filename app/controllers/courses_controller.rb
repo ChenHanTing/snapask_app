@@ -1,25 +1,26 @@
 class CoursesController < ApplicationController
+  before_action :is_admin, only: %i[ show edit update destroy ]
   before_action :set_course, only: %i[ show edit update destroy ]
 
-  # GET /courses or /courses.json
+  # GET /courses.rb or /courses.rb.json
   def index
     @courses = Course.all
   end
 
-  # GET /courses/1 or /courses/1.json
+  # GET /courses.rb/1 or /courses.rb/1.json
   def show
   end
 
-  # GET /courses/new
+  # GET /courses.rb/new
   def new
     @course = Course.new
   end
 
-  # GET /courses/1/edit
+  # GET /courses.rb/1/edit
   def edit
   end
 
-  # POST /courses or /courses.json
+  # POST /courses.rb or /courses.rb.json
   def create
     @course = current_user.courses.new(course_params)
 
@@ -34,7 +35,7 @@ class CoursesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /courses/1 or /courses/1.json
+  # PATCH/PUT /courses.rb/1 or /courses.rb/1.json
   def update
     respond_to do |format|
       if @course.update(course_params)
@@ -47,7 +48,7 @@ class CoursesController < ApplicationController
     end
   end
 
-  # DELETE /courses/1 or /courses/1.json
+  # DELETE /courses.rb/1 or /courses.rb/1.json
   def destroy
     @course.destroy
 
@@ -66,5 +67,9 @@ class CoursesController < ApplicationController
     # Only allow a list of trusted parameters through.
     def course_params
       params.require(:course).permit(:topic, :description, :currency, :started_at, :ended_at, :genre_id, :url, :expiration_day)
+    end
+
+    def is_admin
+      redirect_to :root unless current_user&.can_edit?
     end
 end

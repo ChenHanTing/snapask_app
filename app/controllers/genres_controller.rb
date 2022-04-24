@@ -1,4 +1,5 @@
 class GenresController < ApplicationController
+  before_action :is_admin
   before_action :set_genre, only: %i[ show edit update destroy ]
 
   # GET /genres or /genres.json
@@ -66,5 +67,9 @@ class GenresController < ApplicationController
     # Only allow a list of trusted parameters through.
     def genre_params
       params.require(:genre).permit(:title)
+    end
+
+    def is_admin
+      redirect_to :root unless current_user&.can_edit?
     end
 end

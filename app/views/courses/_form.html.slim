@@ -10,6 +10,10 @@
         .col-md-8
           = f.text_field :description, class: "form-control"
       .form-group.mb-3
+        = f.label :url, "URL:", class: "col-md-4 control-label"
+        .col-md-8
+          = f.text_field :url, class: "form-control"
+      .form-group.mb-3
         = f.label :started_at, "開始時間:", class: "col-md-4 control-label"
         .col-md-8
           = f.datetime_select :started_at, ampm: true, minute_step: 15, class: "form-control"
@@ -21,6 +25,10 @@
         = f.label :content, "類別:", class: "col-md-4 control-label"
         .col-md-8
           = f.select :genre_id, options_for_select(Genre.all.map { [_1.title, _1.id] }, @course&.genre_id), {}, class: "form-control"
+      .form-group.mb-3
+        = f.label :currency, "幣別:", class: "col-md-4 control-label"
+        .col-md-8
+          = f.select :currency, options_for_select(Course.currencies.map{|_| [_[0], _[0]]}, @course&.currency), {}, class: "form-control"
       .form-group
         = f.submit "送出", class: "btn btn-primary"
         = link_to "回首頁", root_path, class: "btn btn-warning"

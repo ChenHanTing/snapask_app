@@ -45,6 +45,8 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'
+  # 測試
+  gem 'rspec-rails', '~> 3.2'
 end
 
 group :development do
@@ -70,10 +72,22 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem "devise", "~> 4.8"
 
+# Grape
 gem "grape", "~> 1.6"
-
 gem "grape-entity", "~> 0.10.1"
-
+# UI 文件
+gem 'grape-swagger'
+gem 'grape-swagger-rails', '~> 0.1.0'
+# For Grape::Entity ( https://github.com/ruby-grape/grape-entity )
+gem 'grape-swagger-entity', '~> 0.3'
+# 跨網域
+gem 'rack-cors'
+# member
+gem 'doorkeeper', "5.4.0"
+gem 'doorkeeper-i18n'
+# pug alike template
 gem "slim-rails", "~> 3.4"
 
 gem "annotate", "~> 3.2"
+
+gem "ransack", "~> 2.5"

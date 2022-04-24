@@ -21,7 +21,7 @@ class UsersController < ApplicationController
   private
 
   def is_admin
-    redirect_to :root unless current_user.can_edit?
+    redirect_to :root unless current_user&.super_admin?
   end
 
   def set_user

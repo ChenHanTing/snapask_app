@@ -4,29 +4,29 @@
 
 #### 需要有一個後台可以讓管理者管理教育課程。
 
-1. 可以執行CRUD基本操作
+1. ☑️可以執行CRUD基本操作
 
-2. 若使用者不是管理員，則不允許操作
+2. ☑️若使用者不是管理員，則不允許操作
 
-3. 可以設定課程主題
+3. ☑️可以設定課程主題
 
-4. 可以設定課程價格，幣別
+4. ☑️可以設定課程價格，幣別
 
-  5. 可以設定課程類型
+  5. ☑️可以設定課程類型
 
-  6. 可以設定課程上下架
+  6. ☑️可以設定課程上下架
 
-  7. 可以設定課程URL，以及描述
+  7. ☑️可以設定課程URL，以及描述
 
   8. 可以設定課程效期 1天 ~ 1個月 
 
 #### 這個平台可以讓用戶用API購買教育課程。
 
-  1. 購買後須建立購買紀錄
+  1. ☑️購買後須建立購買紀錄
 
-  2. 若課程已下架，則不能進行購買
+  2. ☑️若課程已下架，則不能進行購買
 
-  3. 若使用者已購買過該課程，且目前還可以取用，則不允許重複購買
+  3. ☑️若使用者已購買過該課程，且目前還可以取用，則不允許重複購買
 
 #### 用戶可以用API瀏覽他所有購買過的課程
 
@@ -40,13 +40,13 @@
 
 #### 需求
 
-  1. 需使用 Grape & Grape entity gem
+  1. ☑️需使用 Grape & Grape entity gem
 
-  2. code 需上 Github，並按照 Github flow。
+  2. ☑️code 需上 Github，並按照 Github flow。
 
-  3. 不用串金流
+  3. ☑️不用串金流
 
-4. 使用 rails 4 或 rails 5 ➡️Rails 5
+4. ☑️使用 rails 4 或 rails 5 ➡️Rails 5
 
 #### 加分題
 
@@ -71,6 +71,7 @@ rails generate devise:views users
 # 前台grape
 bundle add grape
 bundle add grape-entity
+bundle add swagger_ui_engine
 
 # 排版工具
 bundle add slim-rails
@@ -197,23 +198,182 @@ rails generate scaffold Genre title
 rails generate scaffold Course topic description currency:integer started_at:datetime ended_at:datetime genre:belongs_to url expiration_day:integer
 
 # 會員購客(Grape用)
-rails g model member_course expiration_date:datetime member:belongs_to courses:belongs_to pay_method:integer paid_at:datetime
+rails g model member_course expiration_date:datetime member:belongs_to courses.rb:belongs_to pay_method:integer paid_at:datetime
 ````
 
 ````txt
 [WARNING] The model name 'member_courses' was recognized as a plural, using the singular 'member_course' instead. Override with --force-plural or setup custom inflection rules for this noun before running the generator.
 ````
 
-seed
+## 後台畫面
+
+#### 類別新增、編輯、列表頁
+
+訪客以及普通權限只能看到以下畫面，且不能新增、編輯課程
+
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1h1lqz83d5uj21ha0ij3z4.jpg)
+
+super admin 可以看到的畫面如下，而admin 與 super admin的差別只有在不能調整其他使用者的權限，因此也不能進入使用者畫面
+
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1h1lr0rd6cfj21ha0daaaq.jpg)
+
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1h1lrineavyj21hb0knt9y.jpg)
+
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1h1lrly0xayj21h70l9gn8.jpg)
+
+### Grape
+
+````txt
+http://localhost:3000/api/v1/swagger_doc
+
+http://localhost:3000/swagger
+undefined method `before_filter' for GrapeSwaggerRails::ApplicationController:Class Did you mean? before_action
+````
+
+#### OAuth
+
+````sh
+rails generate doorkeeper:migration
+rails db:migrate
+````
+
+在 `initializers/doorkeeper.rb`
 
 ````ruby
+Doorkeeper.configure do
+  orm :active_record
+
+  # This block will be called to check whether the resource owner is authenticated or not.
+  resource_owner_authenticator do
+    raise "Please configure doorkeeper resource_owner_authenticator block located in #{__FILE__}"
+  end
+
+  resource_owner_from_credentials do |routes|
+    Customer.authenticate(params[:email], params[:password])
+  end
+
+  use_refresh_token
+
+  skip_authorization do
+    true
+  end
+
+  api_only
+
+  enforce_configured_scopes
+end
 ````
+
+登入會員
+
+````txt
+POST /oauth/token HTTP/1.1
+Host: localhost:3000
+Content-Type: application/json
+Cache-Control: no-cache
+Postman-Token: 0481e43d-2ca2-b29b-402f-45f20dc4a0cc
+
+{
+	"email": "kd@gmail.com",
+	"password": "123456",
+	"grant_type": "password",
+	"client_id": "YOx8-q08UK0sXSD4SVPQQL7JPO0vMoolwoSje7xP1NQ",
+	"client_secret": "eDt2i-XJ5rT-OVJt_nph1wmI5DRC81MUMdOhI8s_l5k"
+}
+````
+
+會員註冊
+
+````txt
+POST /api/v1/members HTTP/1.1
+Host: localhost:3000
+Content-Type: application/json
+Cache-Control: no-cache
+Postman-Token: 4c382b13-a63f-5f39-c73f-59b49a7bfe2d
+
+{
+	"email": "ke@gmail.com",
+	"password": "123456"
+}
+````
+
+查看會員狀態登入失敗回傳401 
+
+````txt
+GET /api/v1/members HTTP/1.1
+Host: localhost:3000
+Cache-Control: no-cache
+Postman-Token: d8740107-072f-1d5b-260b-ef10e0d4a910
+````
+
+查看會員狀態登入成功範例
+
+````txt
+GET /api/v1/members HTTP/1.1
+Host: localhost:3000
+Authorization: Bearer Afa9Qx_7UsURlOl7YiSSiTLQj0k8dTeEFnkxYJxMVj8
+Cache-Control: no-cache
+Postman-Token: bec184b3-b213-09f7-f8f5-a940e1a464e4
+````
+
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1h1loqo58iuj20uc0dqt9v.jpg)
+
+要使得Rails 5專案看懂 `doorkeeper_token`，必須include
+
+````ruby
+require 'doorkeeper/grape/helpers'
+
+class ApiRoot < Grape::API
+  PREFIX = '/api'.freeze
+  format :json
+  content_type :json, "application/json"
+  default_error_status 400
+
+  rescue_from :all, backtrace: true
+  helpers Doorkeeper::Grape::Helpers
+
+  helpers do
+    # 參考: https://nicedoc.io/ruby-grape/grape
+
+    def authenticate_member!
+      error!('401 Unauthorized', 401) unless current_member
+    end
+
+    # Find the user that owns the access token
+    def current_member
+      Member.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
+    end
+  end
+
+  mount V1::Base
+end
+````
+
+#### 購買課程
+
+課程已購買且在效期內
+
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1h1lrnwg1pkj20u40fy75b.jpg)
+
+找不到課程
+
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1h1lrmwj8a0j20u40fy75b.jpg)
+
+購買成功
+
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1h1lrog39r2j20ub0fy75d.jpg)
+
+#### 購買記錄列表 - 搭配 ransack 使用
 
 
 
 ### 參考資料
 
-- [女子高中生的虛度日常](https://ani.gamer.com.tw/animeVideo.php?sn=13222)
+- [A Japanese how to implement api using Grape](https://qiita.com/mktakuya/items/393d06fed4da75074667)
+- doorkeeper
+  - [Devise with Doorkeeper](https://rubyyagi.com/rails-api-authentication-devise-doorkeeper/)
+  - [Doorkeeper Gitbook](https://doorkeeper.gitbook.io/guides/)
+  - [Doorkeeper Grape INtegration - Rails 5 要人工多include helper method](https://doorkeeper.gitbook.io/guides/grape/grape)
 
 
 
