@@ -18,7 +18,7 @@
 
   7. ☑️可以設定課程URL，以及描述
 
-  8. 可以設定課程效期 1天 ~ 1個月 
+  8. ☑️可以設定課程效期 1天 ~ 1個月 
 
 #### 這個平台可以讓用戶用API購買教育課程。
 
@@ -30,13 +30,13 @@
 
 #### 用戶可以用API瀏覽他所有購買過的課程
 
-  1. 回傳結果要包含課程基本資料
+  1. ☑️回傳結果要包含課程基本資料
 
-  2. 回傳結果要包含所有跟該課程相關的付款資料
+  2. ☑️回傳結果要包含所有跟該課程相關的付款資料
 
-  3. 可以用過濾方式找出特定類型的課程
+  3. ☑️可以用過濾方式找出特定類型的課程
 
-  4. 可以用過濾方式找出目前還可以上的課程
+  4. ☑️可以用過濾方式找出目前還可以上的課程
 
 #### 需求
 
@@ -52,7 +52,11 @@
 
 1. 使用 Rspec 撰寫測試 
 
-2. 請 deploy 到 Heroku or AWS EC2 ➡️Heroku
+2. 請 deploy 到 Heroku or AWS EC2 
+
+   ➡️在兩個月前已經在Heroku 部署過某個簡易專案，附註一樣寫在 [Github](https://github.com/ChenHanTing/deli-app)、[Heroku](https://han-deliapp.herokuapp.com/)。
+
+   ➡️台中某家跨境博弈公司出題，因產業別的關係後來決定不赴約。
 
 ## 紀錄
 
@@ -213,7 +217,7 @@ rails g model member_course expiration_date:datetime member:belongs_to courses.r
 
 ![](https://tva1.sinaimg.cn/large/e6c9d24egy1h1lqz83d5uj21ha0ij3z4.jpg)
 
-super admin 可以看到的畫面如下，而admin 與 super admin的差別只有在不能調整其他使用者的權限，因此也不能進入使用者畫面
+super admin 可以看到的畫面如下，而admin 與 super admin的差別只有在不能調整其他使用者的權限，因此也不能進入使用者畫面。另外課程是否開放購買再上架狀態上有顯示。
 
 ![](https://tva1.sinaimg.cn/large/e6c9d24egy1h1lr0rd6cfj21ha0daaaq.jpg)
 
@@ -363,9 +367,61 @@ end
 
 ![](https://tva1.sinaimg.cn/large/e6c9d24egy1h1lrog39r2j20ub0fy75d.jpg)
 
-#### 購買記錄列表 - 搭配 ransack 使用
+#### 購買記錄列表
 
+下列為撈取購買記錄，付款資訊以及課程資訊也一併夾在在上面
 
+````txt
+curl --location --request GET 'http://localhost:3000/api/v1/courses/record' \
+--header 'Authorization: Bearer u5sPc8Ccc8f5JxZOb24nTmERkDPwYyDvHf-KQITah5c'
+````
+
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1h1lyl9277lj216v0nddhm.jpg)
+
+### 課程列表
+
+在沒登入的狀態下可以撈取全部課程
+
+````txt
+curl --location --request GET 'http://localhost:3000/api/v1/courses'
+````
+
+在登入的狀況下已購買的課程可以用ransacker篩選出可購買資料
+
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1h1lzd6cg2ij216u0j240q.jpg)
+
+篩選種類前要先有種類的api
+
+````txt
+curl --location --request GET 'http://localhost:3000/api/v1/courses/genre'
+````
+
+利用參數控制篩選類型、可購買資料，篩選的api則是
+
+````txt
+curl --location --request GET 'http://localhost:3000/api/v1/courses?can_buy=true&genre_id=2' \
+--header 'Authorization: Bearer u5sPc8Ccc8f5JxZOb24nTmERkDPwYyDvHf-KQITah5c'
+````
+
+下列為一些篩選情境
+
+- 無篩選，共撈取3筆資料
+
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1h1m050q84pj216y0rc41b.jpg)
+
+- 可購買課程、課程種類無交集的篩選，共撈取0筆資料
+
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1h1m050blllj20vy0gxt9t.jpg)
+
+- 可購買課程、課程種類有交集的篩選，共撈取1筆資料
+
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1h1m0504swvj20vv0j275m.jpg)
+
+### Github 紀錄
+
+4/23~4/25 的記錄
+
+![](https://tva1.sinaimg.cn/large/e6c9d24egy1h1m0mshs5aj20t10f0q56.jpg)
 
 ### 參考資料
 
